@@ -16,11 +16,17 @@ public class SecurityConfiguration {
 
         //todo set authentication and authorization
         // currently this will allow all requests to go through without authentication
-        http
-                .authorizeHttpRequests((authz) -> authz
-                        .anyRequest().permitAll()
-                )
-                .httpBasic(withDefaults());
+//        http
+//                .authorizeHttpRequests((authz) -> authz
+//                        .anyRequest().permitAll()
+//                )
+//                .httpBasic(withDefaults());
+
+        http.httpBasic().disable();
+
+        //todo configure csrf
+        http.csrf().disable();
+
         return http.build();
 
     }
