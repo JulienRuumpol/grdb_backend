@@ -1,0 +1,17 @@
+services:
+  grdb:
+    image: mysql:9.2
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'grdb'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'admin'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - grdb-data:/var/lib/mysql
+volumes:
+  grdb-data:
