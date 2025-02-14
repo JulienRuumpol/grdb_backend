@@ -1,34 +1,31 @@
 package com.jr.grdb_backend.controlller;
 
 import com.jr.grdb_backend.dto.UserDto;
-import com.jr.grdb_backend.model.User;
+import com.jr.grdb_backend.model.CustomUser;
 import com.jr.grdb_backend.service.UserService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("user")
+@RestController()
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
     @GetMapping("/")
-    private List<User> getAll(){
+    public List<CustomUser> getAll(){
         return userService.getAll();
     }
 
-    @PostMapping("/")
-    private ResponseEntity addUser(UserDto userDto){
+    @PostMapping("/register")
+    public ResponseEntity addUser(UserDto userDto){
 
-        User user = userService.addUser(userDto);
+        CustomUser user = userService.addUser(userDto);
 
         if (user == null ){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("A user with that email already exists");

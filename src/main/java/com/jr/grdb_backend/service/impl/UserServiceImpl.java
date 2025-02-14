@@ -1,44 +1,46 @@
 package com.jr.grdb_backend.service.impl;
 
 import com.jr.grdb_backend.dto.UserDto;
-import com.jr.grdb_backend.model.User;
+import com.jr.grdb_backend.model.CustomUser;
 import com.jr.grdb_backend.repository.UserRepository;
 import com.jr.grdb_backend.service.UserService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
-    private BCryptPasswordEncoder encoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.encoder= new BCryptPasswordEncoder(16);
     }
 
     @Override
-    public List<User> getAll() {
+    public List<CustomUser> getAll() {
         return userRepository.findAll();
     }
 
     @Override
-    public User addUser(UserDto dto) {
-        User newUser = this.dtoToEntity(dto);
-        if (userRepository.findByEmail(newUser.getEmail()) != null) {
+    public CustomUser addUser(UserDto dto) {
+        CustomUser newUser = this.dtoToEntity(dto);
+        if (userRepository.findByEmail(newUser.getEmail()).isEmpty()) {
+            //todo throw error
             return null;
         }
-
-        newUser.setPassword(encoder.encode(newUser.getPassword()));
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
 
         return userRepository.save(this.dtoToEntity(dto));
     }
 
-    private User dtoToEntity(UserDto dto) {
-        return User.builder()
+    private CustomUser dtoToEntity(UserDto dto) {
+        return CustomUser.builder()
                 .email(dto.getEmail())
                 .password(dto.getPassword())
                 .userName(dto.getUserName())
@@ -48,7 +50,7 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    private UserDto UserToDto(User user) {
+    private UserDto UserToDto(CustomUser user) {
         return UserDto.builder()
                 .email(user.getEmail())
                 .password(user.getPassword())
@@ -58,4 +60,5 @@ public class UserServiceImpl implements UserService {
                 .language(user.getLanguage())
                 .build();
     }
+
 }

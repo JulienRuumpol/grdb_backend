@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Table(name = "users")
-public class User {
+public class CustomUser {
 
     @Column(name = "username")
     private String userName;
@@ -28,4 +28,5 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Language language;
+
 }

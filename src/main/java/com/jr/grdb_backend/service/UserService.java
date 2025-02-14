@@ -1,13 +1,13 @@
 package com.jr.grdb_backend.service;
 
 import com.jr.grdb_backend.dto.UserDto;
-import com.jr.grdb_backend.model.User;
+import com.jr.grdb_backend.model.CustomUser;
 
 import java.util.List;
 
 public interface UserService {
 
-   List<User> getAll();
+   List<CustomUser> getAll();
 
-   User addUser(UserDto dto);
+   CustomUser addUser(UserDto dto);
 }
