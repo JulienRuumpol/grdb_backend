@@ -17,7 +17,6 @@ public class TestController {
     public String home(Principal principal, HttpSession session){
         incrementCount(session, HOME_VIEW_COUNT);
         return "hello " + principal.getName();
-
     }
 
     @GetMapping("/count")

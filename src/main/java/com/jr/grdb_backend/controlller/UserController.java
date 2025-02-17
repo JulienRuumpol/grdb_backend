@@ -17,8 +17,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/")
+    @GetMapping("/h")
     public List<CustomUser> getAll(){
+        System.out.println("endpoint reached");
         return userService.getAll();
     }
 

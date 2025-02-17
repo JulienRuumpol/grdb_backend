@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
         return UserDto.builder()
                 .email(user.getEmail())
                 .password(user.getPassword())
-                .userName(user.getUserName())
+                .userName(user.getUsername())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .language(user.getLanguage())

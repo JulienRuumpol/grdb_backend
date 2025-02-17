@@ -76,19 +76,22 @@ public class CustomUserDetailService implements UserDetailsService {
 //                .build();
 //    }
 //
+
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public CustomUser loadUserByUsername(String username) throws UsernameNotFoundException {
         // rewriting this to use email
 
         Optional<CustomUser> user = userRepository.findByEmail(username);
-        if (!user.isPresent()) {
+        if (user.isPresent()) {
+            return user.get();
             //todo check if this code is valid might be missing initializing object?
-            var userObj = user.get();
-
-            return User.builder()
-                    .password(userObj.getPassword())
-                    .username(userObj.getUserName())
-                    .build();
+//            var userObj = user.get();
+//
+//            //todo remap to UserDetail in User class might be needed?
+//            return User.builder()
+//                    .password(userObj.getPassword())
+//                    .username(userObj.getUsername())
+//                    .build();
         } else {
             throw new UsernameNotFoundException(username);
         }
