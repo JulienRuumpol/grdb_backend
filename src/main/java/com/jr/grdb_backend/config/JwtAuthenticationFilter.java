@@ -8,12 +8,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -34,6 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.jwtService = jwtService;
         this.customUserDetailService = customUserDetailService;
     }
+
 
     @Override
     protected void doFilterInternal(
@@ -66,9 +64,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
-            filterChain.doFilter(request, response);
 
+            filterChain.doFilter(request, response);
         } catch(Exception e){
+                //todo handle this error in FE and backend and display error JWT token expired
             handlerExceptionResolver.resolveException(request, response, null, e);
             System.out.println("error: " + e.getMessage());
         }

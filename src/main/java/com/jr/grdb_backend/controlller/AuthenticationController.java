@@ -4,8 +4,9 @@ import com.jr.grdb_backend.controlller.responses.Loginresponse;
 import com.jr.grdb_backend.dto.LoginUserDto;
 import com.jr.grdb_backend.dto.RegisterDto;
 import com.jr.grdb_backend.model.CustomUser;
+import com.jr.grdb_backend.service.AuthenticationService;
 import com.jr.grdb_backend.service.JwtService;
-import com.jr.grdb_backend.service.impl.AuthenticationService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,17 +25,26 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/register")
     public ResponseEntity<CustomUser> RegisterUser(@RequestBody RegisterDto registerDto) {
-        CustomUser registeredUser = authenticationService.signUp(registerDto);
-        return ResponseEntity.ok(registeredUser);
+        try{
+            CustomUser registeredUser = authenticationService.register(registerDto);
+            return ResponseEntity.ok(registeredUser);
+        } catch(Exception e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new CustomUser());
+        }
     }
 
     @PostMapping("/login")
     public ResponseEntity<Loginresponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
-        CustomUser authenticatedUser = authenticationService.authenticate(loginUserDto);
-        String jwtToken = jwtService.generateToken(authenticatedUser);
-        Loginresponse loginresponse = new Loginresponse(jwtToken, jwtService.getExpirationTime());
-        return ResponseEntity.ok(loginresponse);
+        try {
+            CustomUser authenticatedUser = authenticationService.authenticate(loginUserDto);
+            String jwtToken = jwtService.generateToken(authenticatedUser);
+            Loginresponse loginresponse = new Loginresponse(jwtToken, jwtService.getExpirationTime());
+            return ResponseEntity.ok(loginresponse);
+        } catch( Exception  e){
+            Loginresponse loginresponse = new Loginresponse("Invalid user and password combination", 0L);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(loginresponse);
+        }
     }
 }

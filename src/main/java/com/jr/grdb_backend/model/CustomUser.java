@@ -1,6 +1,7 @@
 package com.jr.grdb_backend.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jr.grdb_backend.enume.Language;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,11 +23,11 @@ import java.util.List;
 public class CustomUser implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    //todo may need to extend blalba
     @Column(name = "username")
     private String userName;
+    @JsonIgnore
     private String password;
     @Column(name = "firstname")
     private String firstName;
@@ -35,9 +36,14 @@ public class CustomUser implements UserDetails {
     private String email;
     @Column(name = "is_enabled")
     private boolean enabled;
-
     @Enumerated(EnumType.STRING)
     private Language language;
+    @Column(name = "is_account_non_expired")
+    private boolean isAccountNonExpired;
+    @Column(name = "is_account_non_locked")
+    private boolean isAccountNonLocked;
+    @Column(name = "is_credential_non_expired")
+    private boolean isCredentialNonExpired;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -59,8 +65,7 @@ public class CustomUser implements UserDetails {
         return UserDetails.super.isAccountNonLocked();
     }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
+    public boolean isCredentialNonExpired() {
         return UserDetails.super.isCredentialsNonExpired();
     }
 

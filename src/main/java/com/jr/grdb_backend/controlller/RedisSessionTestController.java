@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 @RestController()
-@RequestMapping()
-public class TestController {
+@RequestMapping("/redis")
+public class RedisSessionTestController {
 
     private final String HOME_VIEW_COUNT = "HOME_VIEW_COUNT";
 
