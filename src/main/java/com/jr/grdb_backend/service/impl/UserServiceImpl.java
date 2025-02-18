@@ -32,18 +32,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CustomUser addUser(UserDto dto) {
-        CustomUser newUser = this.dtoToEntity(dto);
-        if (userRepository.findByEmail(newUser.getEmail()).isEmpty()) {
-            //todo throw error
-            return null;
-        }
-        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-
-        return userRepository.save(this.dtoToEntity(dto));
-    }
-
-    @Override
     public CustomUser findByEmail(String email) {
         Optional<CustomUser> user = userRepository.findByEmail(email);
 

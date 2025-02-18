@@ -10,15 +10,15 @@ public interface JwtService {
 
     String extractUsername(String token);
 
-     <T> T extractClaim(String token, Function<Claims, T> claimsResolver);
+    <T> T extractClaim(String token, Function<Claims, T> claimsResolver);
 
-     String generateToken(CustomUser userDetails);
+    String generateToken(CustomUser userDetails);
 
-     String generateToken(Map<String, Object> extraClaims, CustomUser userDetails);
+    String generateToken(Map<String, Object> extraClaims, CustomUser userDetails);
 
-     long getExpirationTime();
+    long getExpirationTime();
 
-     boolean isTokenValid(String token, CustomUser userDetails);
+    boolean isTokenValid(String token, CustomUser userDetails);
 
 }
 

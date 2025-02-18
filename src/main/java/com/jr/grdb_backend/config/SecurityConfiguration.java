@@ -33,7 +33,6 @@ public class SecurityConfiguration {
     @Autowired
     AuthenticationProvider authenticationProvider;
 
-    //todo rewire into ApplicationConfiguration
     public SecurityConfiguration(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
