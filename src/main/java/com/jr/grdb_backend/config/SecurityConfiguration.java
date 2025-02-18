@@ -41,6 +41,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf-> csrf.disable())
+                .cors(c -> c.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authorize ->
                         authorize.requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .anyRequest().authenticated())
@@ -56,8 +57,7 @@ public class SecurityConfiguration {
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(
-                "http://localhost:4020",
-                "http://localhost:8080"
+                "*"
         ));
         configuration.setAllowedMethods(List.of(
                 "GET",
@@ -66,9 +66,15 @@ public class SecurityConfiguration {
                 "DELETE"
         ));
 
+//        configuration.setAllowedHeaders(List.of(
+//                "Authorization",
+//                "Content-Type",
+//                "Access-Control-Allow-Origin"
+//        ));
+
+//        configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(List.of(
-                "Authorization",
-                "Content-Type"
+                "*"
         ));
         UrlBasedCorsConfigurationSource source  = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
