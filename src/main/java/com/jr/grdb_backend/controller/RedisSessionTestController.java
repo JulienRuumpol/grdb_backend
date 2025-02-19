@@ -1,4 +1,4 @@
-package com.jr.grdb_backend.controlller;
+package com.jr.grdb_backend.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,6 +1,6 @@
-package com.jr.grdb_backend.controlller;
+package com.jr.grdb_backend.controller;
 
-import com.jr.grdb_backend.controlller.responses.Loginresponse;
+import com.jr.grdb_backend.controller.responses.Loginresponse;
 import com.jr.grdb_backend.dto.LoginUserDto;
 import com.jr.grdb_backend.dto.RegisterDto;
 import com.jr.grdb_backend.model.CustomUser;

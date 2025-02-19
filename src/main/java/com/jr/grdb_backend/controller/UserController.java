@@ -1,4 +1,4 @@
-package com.jr.grdb_backend.controlller;
+package com.jr.grdb_backend.controller;
 
 import com.jr.grdb_backend.model.CustomUser;
 import com.jr.grdb_backend.service.UserService;
