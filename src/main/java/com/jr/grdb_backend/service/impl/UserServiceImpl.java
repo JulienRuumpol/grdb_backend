@@ -4,6 +4,7 @@ import com.jr.grdb_backend.dto.RegisterDto;
 import com.jr.grdb_backend.dto.UserDto;
 import com.jr.grdb_backend.enume.Language;
 import com.jr.grdb_backend.model.CustomUser;
+import com.jr.grdb_backend.model.Game;
 import com.jr.grdb_backend.repository.UserRepository;
 import com.jr.grdb_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,11 @@ public class UserServiceImpl implements UserService {
         Optional<CustomUser> user = userRepository.findByEmail(email);
 
         return user.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    @Override
+    public List<Game> getGamesByUserId(Long userId) {
+        return userRepository.findGamesByUserId(userId);
     }
 
     private CustomUser dtoToEntity(UserDto dto) {
@@ -74,5 +80,6 @@ public class UserServiceImpl implements UserService {
                 .language(Language.DUTCH)
                 .build();
     }
+
 }
 

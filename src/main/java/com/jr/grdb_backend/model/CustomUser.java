@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -45,6 +46,15 @@ public class CustomUser implements UserDetails {
     @Column(name = "is_credential_non_expired")
     private boolean isCredentialNonExpired;
 
+    @ManyToMany
+    @JoinTable(
+            name = "user_game",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "game_id"),
+            indexes = @Index(columnList = "game_id")
+    )
+    private List<Game> games = new ArrayList<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
@@ -52,7 +62,7 @@ public class CustomUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return  userName;
+        return userName;
     }
 
     @Override
