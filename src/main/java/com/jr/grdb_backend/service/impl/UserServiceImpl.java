@@ -6,6 +6,7 @@ import com.jr.grdb_backend.enume.Language;
 import com.jr.grdb_backend.model.CustomUser;
 import com.jr.grdb_backend.model.Game;
 import com.jr.grdb_backend.repository.UserRepository;
+import com.jr.grdb_backend.service.GameService;
 import com.jr.grdb_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,9 +23,12 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    private GameService gameService;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository,
+                           GameService gameService) {
         this.userRepository = userRepository;
+        this.gameService = gameService;
     }
 
     @Override
@@ -42,6 +46,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Game> getGamesByUserId(Long userId) {
         return userRepository.findGamesByUserId(userId);
+    }
+
+    @Override
+    public List<Game> addGame(Long userId, Long gameId) {
+        CustomUser user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Game game = gameService.findById(gameId);
+
+        //add error to avoid duplicate games.
+        user.addGameToGames(game);
+
+      return  userRepository.save(user).getGames();
+    }
+
+    @Override
+    public List<Game> getGamesNotInUserList(Long userId) {
+        CustomUser user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        List<Game> games = user.getGames();
+
+        List<Game> allGamesList = gameService.getAll();
+//todo test api
+        return allGamesList.stream().filter(games::contains).toList();
     }
 
     private CustomUser dtoToEntity(UserDto dto) {

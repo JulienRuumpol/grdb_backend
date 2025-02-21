@@ -24,7 +24,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public Game findById(Long id) {
-        return gameRepository.findById(id).orElseThrow(() -> new RuntimeException("user with Id not found " + id));
+        return gameRepository.findById(id).orElseThrow(() -> new RuntimeException("Game with id: "+ id +" not found "));
     }
 
     @Override

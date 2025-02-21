@@ -83,4 +83,8 @@ public class CustomUser implements UserDetails {
     public boolean isEnabled() {
         return this.enabled;
     }
+
+    public void addGameToGames(Game game){
+        this.games.add(game);
+    }
 }

@@ -5,10 +5,7 @@ import com.jr.grdb_backend.model.Game;
 import com.jr.grdb_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,5 +24,19 @@ public class UserController {
     @GetMapping("/{id}/game")
     public ResponseEntity<List<Game>> getGamebyUserId(@PathVariable Long id){
         return ResponseEntity.ok().body(userService.getGamesByUserId(id));
+    }
+
+    //todo test api
+    @GetMapping("/{id}/game/unique")
+        public ResponseEntity<List<Game>> getGamesNotInUserList(@PathVariable Long id){
+        return ResponseEntity.ok().body(userService.getGamesNotInUserList(id));
+    }
+
+//todo test api
+    @PostMapping("/{userId}/game{gameId}")
+    public ResponseEntity<List<Game>> addGame(@PathVariable Long userId, @PathVariable Long gameId){
+        return ResponseEntity.ok().body(userService.addGame(userId,gameId));
+
+
     }
 }

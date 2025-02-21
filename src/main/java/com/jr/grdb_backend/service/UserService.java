@@ -13,5 +13,7 @@ public interface UserService {
    CustomUser findByEmail(String email);
    CustomUser registerDtoToUser(RegisterDto dto);
    List<Game> getGamesByUserId(Long userId);
+   List<Game> addGame(Long userId, Long gameId);
+   List<Game> getGamesNotInUserList(Long userId);
 
 }
