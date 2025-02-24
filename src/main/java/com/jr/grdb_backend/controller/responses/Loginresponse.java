@@ -1,4 +1,4 @@
-package com.jr.grdb_backend.controlller.responses;
+package com.jr.grdb_backend.controller.responses;
 
 import lombok.Data;
 

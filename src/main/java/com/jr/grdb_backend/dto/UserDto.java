@@ -1,8 +1,6 @@
 package com.jr.grdb_backend.dto;
 
 import com.jr.grdb_backend.enume.Language;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
