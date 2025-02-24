@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,10 +54,11 @@ public class UserServiceImpl implements UserService {
         CustomUser user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         Game game = gameService.findById(gameId);
 
-        //add error to avoid duplicate games.
+        if (user.getGames().contains(game)) throw new RuntimeException("A user can not contain a duplicate game");
+
         user.addGameToGames(game);
 
-      return  userRepository.save(user).getGames();
+        return userRepository.save(user).getGames();
     }
 
     @Override
@@ -65,8 +67,8 @@ public class UserServiceImpl implements UserService {
         List<Game> games = user.getGames();
 
         List<Game> allGamesList = gameService.getAll();
-//todo test api
-        return allGamesList.stream().filter(games::contains).toList();
+
+        return allGamesList.stream().filter(word -> !new HashSet<>(games).contains(word)).toList();
     }
 
     private CustomUser dtoToEntity(UserDto dto) {

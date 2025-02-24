@@ -26,17 +26,14 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getGamesByUserId(id));
     }
 
-    //todo test api
     @GetMapping("/{id}/game/unique")
         public ResponseEntity<List<Game>> getGamesNotInUserList(@PathVariable Long id){
         return ResponseEntity.ok().body(userService.getGamesNotInUserList(id));
     }
 
-//todo test api
-    @PostMapping("/{userId}/game{gameId}")
+    @PostMapping("/{userId}/game/{gameId}")
     public ResponseEntity<List<Game>> addGame(@PathVariable Long userId, @PathVariable Long gameId){
         return ResponseEntity.ok().body(userService.addGame(userId,gameId));
-
 
     }
 }
