@@ -33,7 +33,10 @@ public class GameServiceImpl implements GameService {
         Game oldGame = gameRepository.getReferenceById(gameDto.getId());
         Game newGame = this.gameDtoToGame(gameDto);
 
-        return gameRepository.save(newGame);
+
+        //current fix because this returns a null object
+         gameRepository.save(newGame);
+         return newGame;
     }
 
     @Override
