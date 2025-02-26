@@ -1,5 +1,6 @@
 package com.jr.grdb_backend.service.impl;
 
+import com.jr.grdb_backend.dto.LanguageDto;
 import com.jr.grdb_backend.dto.RegisterDto;
 import com.jr.grdb_backend.dto.UserDto;
 import com.jr.grdb_backend.enume.Language;
@@ -69,6 +70,13 @@ public class UserServiceImpl implements UserService {
         List<Game> allGamesList = gameService.getAll();
 
         return allGamesList.stream().filter(word -> !new HashSet<>(games).contains(word)).toList();
+    }
+
+    @Override
+    public CustomUser updateLanguage(Long userId, LanguageDto languageDto) {
+        CustomUser user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        user.setLanguage(languageDto.getLanguage());
+        return userRepository.save(user);
     }
 
     private CustomUser dtoToEntity(UserDto dto) {

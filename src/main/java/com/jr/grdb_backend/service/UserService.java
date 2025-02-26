@@ -1,5 +1,6 @@
 package com.jr.grdb_backend.service;
 
+import com.jr.grdb_backend.dto.LanguageDto;
 import com.jr.grdb_backend.dto.RegisterDto;
 import com.jr.grdb_backend.model.CustomUser;
 import com.jr.grdb_backend.model.Game;
@@ -15,5 +16,6 @@ public interface UserService {
    List<Game> getGamesByUserId(Long userId);
    List<Game> addGame(Long userId, Long gameId);
    List<Game> getGamesNotInUserList(Long userId);
+   CustomUser updateLanguage(Long userId, LanguageDto newLanguage);
 
 }
