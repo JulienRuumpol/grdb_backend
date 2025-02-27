@@ -1,5 +1,6 @@
 package com.jr.grdb_backend.config;
 
+import com.jr.grdb_backend.controller.exceptions.JwtTokenExpiredException;
 import com.jr.grdb_backend.model.CustomUser;
 import com.jr.grdb_backend.service.JwtService;
 import com.jr.grdb_backend.service.impl.CustomUserDetailService;
@@ -40,6 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
             ) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
@@ -68,8 +70,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch(Exception e){
                 //todo handle this error in FE and backend and display error JWT token expired
-            handlerExceptionResolver.resolveException(request, response, null, e);
-            System.out.println("error: " + e.getMessage());
+//            handlerExceptionResolver.resolveException(request, response, null, e);
+                System.out.println("error: " + e.getMessage());
+                HttpServletResponse httpResponse = (HttpServletResponse) response;
+                httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                throw new JwtTokenExpiredException("Token has expired, please login again.");
         }
 
     }
