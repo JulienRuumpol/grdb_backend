@@ -19,8 +19,12 @@ public class JwtServiceImpl implements JwtService {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
-    @Value("${jwt.expiration_time}")
-    private Long EXPIRATION_TIME;
+    @Value("${jwt.acces_token_expiration_time}")
+    private Long ACCESS_TOKEN_EXPIRATION_TIME;
+
+    @Value("${jwt.refresh_token_expiration_time}")
+    private Long REFRESH_TOKEN_EXPIRATION_TIME;
+
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -31,16 +35,21 @@ public class JwtServiceImpl implements JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(CustomUser userDetails){
+    public String generateToken(CustomUser userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
 
-    public String generateToken(Map<String, Object> extraClaims, CustomUser userDetails){
-        return buildToken(extraClaims, userDetails, EXPIRATION_TIME);
+    public String generateToken(Map<String, Object> extraClaims, CustomUser userDetails) {
+        return buildToken(extraClaims, userDetails, ACCESS_TOKEN_EXPIRATION_TIME);
     }
 
+    public String generateRefreshToken(CustomUser userDetails) {
+        return buildToken(new HashMap<>(), userDetails, REFRESH_TOKEN_EXPIRATION_TIME);
+    }
+    
+
     public long getExpirationTime() {
-        return EXPIRATION_TIME;
+        return ACCESS_TOKEN_EXPIRATION_TIME;
     }
 
     private String buildToken(Map<String, Object> extraClaims, CustomUser userDetails, Long expirationTime) {
@@ -48,8 +57,8 @@ public class JwtServiceImpl implements JwtService {
                 .claims(extraClaims)
                 .subject(userDetails.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS512,SECRET_KEY)
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();
     }
 
@@ -66,7 +75,7 @@ public class JwtServiceImpl implements JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private Claims extractAllClaims(String token){
+    private Claims extractAllClaims(String token) {
         return Jwts.parser()
 //                .setSigningKey(getSignInKey())
                 .setSigningKey(SECRET_KEY)

@@ -20,6 +20,7 @@ public interface JwtService {
 
     boolean isTokenValid(String token, CustomUser userDetails);
 
+   String generateRefreshToken(CustomUser userDetails);
 }
 
 

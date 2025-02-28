@@ -1,6 +1,5 @@
 package com.jr.grdb_backend.config;
 
-import com.jr.grdb_backend.controller.exceptions.JwtTokenExpiredException;
 import com.jr.grdb_backend.model.CustomUser;
 import com.jr.grdb_backend.service.JwtService;
 import com.jr.grdb_backend.service.impl.CustomUserDetailService;
@@ -74,7 +73,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 System.out.println("error: " + e.getMessage());
                 HttpServletResponse httpResponse = (HttpServletResponse) response;
                 httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                throw new JwtTokenExpiredException("Token has expired, please login again.");
+//                throw new JwtTokenExpiredException("Token has expired, please login again.");
         }
 
     }
