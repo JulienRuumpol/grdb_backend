@@ -10,10 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -53,11 +50,11 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/token/refresh")
-    public void refreshToken(HttpServletRequest request,
+    @GetMapping("/refresh")
+    public ResponseEntity<Loginresponse> refreshToken(HttpServletRequest request,
                              HttpServletResponse response) throws IOException {
 
-        authenticationService.refreshToken(request, response);
+        return ResponseEntity.ok(authenticationService.refreshToken(request, response));
     }
 
 }

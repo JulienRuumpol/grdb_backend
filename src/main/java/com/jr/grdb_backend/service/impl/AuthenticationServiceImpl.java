@@ -1,6 +1,5 @@
 package com.jr.grdb_backend.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jr.grdb_backend.controller.responses.Loginresponse;
 import com.jr.grdb_backend.dto.LoginUserDto;
 import com.jr.grdb_backend.dto.RegisterDto;
@@ -64,7 +63,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Transactional
     @Override
-    public void refreshToken(
+    public Loginresponse refreshToken(
             HttpServletRequest request,
             HttpServletResponse response
     ) throws IOException {
@@ -72,7 +71,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         final String refreshToken;
         final String userEmail;
         if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-            return;
+            return null;
         }
         refreshToken = authHeader.substring(7);
         userEmail = jwtService.extractUsername(refreshToken);
@@ -81,36 +80,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     .orElseThrow();
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateToken(user);
-//                revokeAllUserTokens(user);
-//                saveUserToken(user, accessToken);
                 var authResponse = Loginresponse.builder()
-                        .token(accessToken)
+                        .accessToken(accessToken)
                         .refreshToken(refreshToken)
                         .build();
-                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+
+                return authResponse;
             }
         }
+        return null;
     }
 
-//    private void revokeAllUserTokens(User user) {
-//        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
-//        if (validUserTokens.isEmpty())
-//            return;
-//        validUserTokens.forEach(token -> {
-//            token.setExpired(true);
-//            token.setRevoked(true);
-//        });
-//        tokenRepository.saveAll(validUserTokens);
-//    }
-//    private void saveUserToken(User user, String jwtToken) {
-//        var token = Token.builder()
-//                .user(user)
-//                .token(jwtToken)
-//                .tokenType(TokenType.BEARER)
-//                .expired(false)
-//                .revoked(false)
-//                .build();
-//        tokenRepository.save(token);
-//    }
 
 }

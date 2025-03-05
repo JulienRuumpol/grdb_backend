@@ -6,12 +6,12 @@ import lombok.Data;
 @Builder
 @Data
 public class Loginresponse {
-    private String token;
+    private String accessToken;
     private String refreshToken;
 
 
-    public Loginresponse(String token,  String refreshToken ) {
-        this.token = token;
+    public Loginresponse(String accessToken, String refreshToken ) {
+        this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
 }
