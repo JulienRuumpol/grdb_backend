@@ -67,10 +67,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch(Exception e){
-                //todo handle this error in FE and backend and display error JWT token expired
-            handlerExceptionResolver.resolveException(request, response, null, e);
-            System.out.println("error: " + e.getMessage());
-        }
+                System.out.println("error at JwtAuthenticationFiler: " + e.getMessage());
+                HttpServletResponse httpResponse = (HttpServletResponse) response;
+                httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            }
 
     }
 

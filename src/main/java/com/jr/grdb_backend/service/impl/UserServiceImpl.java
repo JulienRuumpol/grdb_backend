@@ -1,5 +1,6 @@
 package com.jr.grdb_backend.service.impl;
 
+import com.jr.grdb_backend.dto.LanguageDto;
 import com.jr.grdb_backend.dto.RegisterDto;
 import com.jr.grdb_backend.dto.UserDto;
 import com.jr.grdb_backend.enume.Language;
@@ -8,7 +9,10 @@ import com.jr.grdb_backend.model.Game;
 import com.jr.grdb_backend.repository.UserRepository;
 import com.jr.grdb_backend.service.GameService;
 import com.jr.grdb_backend.service.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -71,6 +75,39 @@ public class UserServiceImpl implements UserService {
         return allGamesList.stream().filter(word -> !new HashSet<>(games).contains(word)).toList();
     }
 
+    @Override
+    public CustomUser updateLanguage(Long userId, LanguageDto languageDto) {
+        CustomUser user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        user.setLanguage(languageDto.getLanguage());
+        return userRepository.save(user);
+    }
+
+    @Override
+    public UserDto getCustomUserById(Long userId) {
+        Optional<CustomUser> user = userRepository.findById(userId);
+        if (user.isPresent()) return userToDto(user.get());
+        else throw new RuntimeException("User not found");
+    }
+
+    @Override
+    @Transactional
+    public String getCustomUserThroughAuthentication() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        CustomUser user= (CustomUser) authentication.getPrincipal();
+        return user.getUsername();
+    }
+
+    @Override
+    public UserDto getUserByEmail(String email) {
+        Optional<CustomUser> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            return userToDto(user.get());
+        }
+        throw new RuntimeException("User not found");
+    }
+
+
     private CustomUser dtoToEntity(UserDto dto) {
         return CustomUser.builder()
                 .email(dto.getEmail())
@@ -82,10 +119,11 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    private UserDto UserToDto(CustomUser user) {
+    private UserDto userToDto(CustomUser user) {
         return UserDto.builder()
                 .email(user.getEmail())
-                .password(user.getPassword())
+//                .password(user.getPassword())
+                .password("")
                 .userName(user.getUsername())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())

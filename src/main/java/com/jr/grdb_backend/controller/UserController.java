@@ -1,5 +1,7 @@
 package com.jr.grdb_backend.controller;
 
+import com.jr.grdb_backend.dto.LanguageDto;
+import com.jr.grdb_backend.dto.UserDto;
 import com.jr.grdb_backend.model.CustomUser;
 import com.jr.grdb_backend.model.Game;
 import com.jr.grdb_backend.service.UserService;
@@ -36,4 +38,19 @@ public class UserController {
         return ResponseEntity.ok().body(userService.addGame(userId,gameId));
 
     }
+
+    @PutMapping("/{userId}/language")
+    public ResponseEntity<CustomUser> setLanguage(@PathVariable Long userId, @RequestBody LanguageDto language){
+        return ResponseEntity.ok().body(this.userService.updateLanguage(userId, language));
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long userId){
+        return ResponseEntity.ok().body(this.userService.getCustomUserById(userId));
+    }
+
+//    @GetMapping("/{email}")
+//    public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email){
+//        return ResponseEntity.ok().body(this.userService.getUserByEmail(email));
+//    }
 }
