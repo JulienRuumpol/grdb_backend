@@ -16,10 +16,11 @@ public interface JwtService {
 
     String generateToken(Map<String, Object> extraClaims, CustomUser userDetails);
 
-    long getExpirationTime();
+    long getAccessTokenExpirationTime();
 
     boolean isTokenValid(String token, CustomUser userDetails);
 
+   String generateRefreshToken(CustomUser userDetails);
 }
 
 

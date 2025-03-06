@@ -1,14 +1,17 @@
 package com.jr.grdb_backend.controller.responses;
 
+import lombok.Builder;
 import lombok.Data;
 
+@Builder
 @Data
 public class Loginresponse {
-    private String token;
-    private Long expiresIn;
+    private String accessToken;
+    private String refreshToken;
 
-    public Loginresponse(String token, Long expiresIn) {
-        this.token = token;
-        this.expiresIn = expiresIn;
+
+    public Loginresponse(String accessToken, String refreshToken ) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
     }
 }
