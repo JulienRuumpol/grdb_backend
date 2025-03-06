@@ -50,7 +50,7 @@ public class JwtServiceImpl implements JwtService {
     }
     
 
-    public long getExpirationTime() {
+    public long getAccessTokenExpirationTime() {
         return ACCESS_TOKEN_EXPIRATION_TIME;
     }
 

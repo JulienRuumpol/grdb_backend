@@ -40,7 +40,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
             ) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
@@ -68,7 +67,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch(Exception e){
-                System.out.println("error: " + e.getMessage());
+                System.out.println("error at JwtAuthenticationFiler: " + e.getMessage());
                 HttpServletResponse httpResponse = (HttpServletResponse) response;
                 httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             }
