@@ -83,11 +83,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CustomUser getCustomUserById(Long userId) {
-
+    public UserDto getCustomUserById(Long userId) {
         Optional<CustomUser> user = userRepository.findById(userId);
-
-        if (user.isPresent()) return user.get();
+        if (user.isPresent()) return userToDto(user.get());
         else throw new RuntimeException("User not found");
     }
 

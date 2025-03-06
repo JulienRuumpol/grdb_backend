@@ -18,7 +18,7 @@ public interface UserService {
    List<Game> addGame(Long userId, Long gameId);
    List<Game> getGamesNotInUserList(Long userId);
    CustomUser updateLanguage(Long userId, LanguageDto newLanguage);
-   CustomUser getCustomUserById(Long userId);
+   UserDto getCustomUserById(Long userId);
    String getCustomUserThroughAuthentication();
    UserDto getUserByEmail(String email);
 }

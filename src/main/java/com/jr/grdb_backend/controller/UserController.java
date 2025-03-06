@@ -44,14 +44,13 @@ public class UserController {
         return ResponseEntity.ok().body(this.userService.updateLanguage(userId, language));
     }
 
-//    @GetMapping("/{userId}")
-//    public ResponseEntity<CustomUser> getUserById(@PathVariable Long userId){
-//        System.out.println(this.userService.getCustomUserThroughAuthentication());
-//        return ResponseEntity.ok().body(this.userService.getCustomUserById(userId));
-//    }
-
-    @GetMapping("/{email}")
-    public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email){
-        return ResponseEntity.ok().body(this.userService.getUserByEmail(email));
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long userId){
+        return ResponseEntity.ok().body(this.userService.getCustomUserById(userId));
     }
+
+//    @GetMapping("/{email}")
+//    public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email){
+//        return ResponseEntity.ok().body(this.userService.getUserByEmail(email));
+//    }
 }
