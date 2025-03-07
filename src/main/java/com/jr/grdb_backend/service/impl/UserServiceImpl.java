@@ -116,6 +116,7 @@ public class UserServiceImpl implements UserService {
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
                 .language(dto.getLanguage())
+                .role(dto.getRole())
                 .build();
     }
 
@@ -128,6 +129,7 @@ public class UserServiceImpl implements UserService {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .language(user.getLanguage())
+                .role(user.getRole())
                 .build();
     }
 

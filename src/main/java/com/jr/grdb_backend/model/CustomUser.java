@@ -45,7 +45,6 @@ public class CustomUser implements UserDetails {
     private boolean isAccountNonLocked;
     @Column(name = "is_credential_non_expired")
     private boolean isCredentialNonExpired;
-
     @ManyToMany
     @JoinTable(
             name = "user_game",
@@ -54,6 +53,11 @@ public class CustomUser implements UserDetails {
             indexes = @Index(columnList = "game_id")
     )
     private List<Game> games = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
