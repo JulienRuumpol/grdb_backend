@@ -6,8 +6,11 @@ import com.jr.grdb_backend.dto.UserDto;
 import com.jr.grdb_backend.enume.Language;
 import com.jr.grdb_backend.model.CustomUser;
 import com.jr.grdb_backend.model.Game;
+import com.jr.grdb_backend.model.Role;
+import com.jr.grdb_backend.repository.RoleRepository;
 import com.jr.grdb_backend.repository.UserRepository;
 import com.jr.grdb_backend.service.GameService;
+import com.jr.grdb_backend.service.RoleService;
 import com.jr.grdb_backend.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +32,16 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     private GameService gameService;
+    private RoleService roleService;
+    @Autowired
+    private RoleRepository roleRepository;
 
     public UserServiceImpl(UserRepository userRepository,
-                           GameService gameService) {
+                           GameService gameService,
+                           RoleService  roleService) {
         this.userRepository = userRepository;
         this.gameService = gameService;
+        this.roleService = roleService;
     }
 
     @Override
@@ -105,6 +113,21 @@ public class UserServiceImpl implements UserService {
             return userToDto(user.get());
         }
         throw new RuntimeException("User not found");
+    }
+
+    @Override
+    public UserDto updateRole(Long userId, Role role) {
+
+        CustomUser user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Role newRole  = roleRepository.findById(userId).orElseThrow(() -> new RuntimeException("Role not found"));
+
+        user.setRole(newRole);
+
+        userRepository.save(user);
+
+        UserDto dtoUser = userToDto(user);
+
+        return dtoUser;
     }
 
 

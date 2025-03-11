@@ -5,6 +5,7 @@ import com.jr.grdb_backend.dto.RegisterDto;
 import com.jr.grdb_backend.dto.UserDto;
 import com.jr.grdb_backend.model.CustomUser;
 import com.jr.grdb_backend.model.Game;
+import com.jr.grdb_backend.model.Role;
 
 import java.util.List;
 
@@ -21,5 +22,6 @@ public interface UserService {
    UserDto getCustomUserById(Long userId);
    String getCustomUserThroughAuthentication();
    UserDto getUserByEmail(String email);
+   UserDto updateRole(Long userId,  Role role);
 }
 
