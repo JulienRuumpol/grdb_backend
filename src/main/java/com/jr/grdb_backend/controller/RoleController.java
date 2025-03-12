@@ -2,6 +2,7 @@ package com.jr.grdb_backend.controller;
 
 import com.jr.grdb_backend.model.Role;
 import com.jr.grdb_backend.service.RoleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import java.util.List;
 @RequestMapping("/role")
 public class RoleController {
 
+    @Autowired
     private RoleService roleservice;
 
     @GetMapping("/")
