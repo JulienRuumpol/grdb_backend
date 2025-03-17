@@ -1,5 +1,6 @@
 package com.jr.grdb_backend.service.impl;
 
+import com.jr.grdb_backend.dto.ChangePasswordDto;
 import com.jr.grdb_backend.dto.LanguageDto;
 import com.jr.grdb_backend.dto.RegisterDto;
 import com.jr.grdb_backend.dto.UserDto;
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
     public UserServiceImpl(UserRepository userRepository,
                            GameService gameService,
-                           RoleService  roleService) {
+                           RoleService roleService) {
         this.userRepository = userRepository;
         this.gameService = gameService;
         this.roleService = roleService;
@@ -102,7 +103,7 @@ public class UserServiceImpl implements UserService {
     public String getCustomUserThroughAuthentication() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        CustomUser user= (CustomUser) authentication.getPrincipal();
+        CustomUser user = (CustomUser) authentication.getPrincipal();
         return user.getUsername();
     }
 
@@ -119,7 +120,7 @@ public class UserServiceImpl implements UserService {
     public UserDto updateRole(Long userId, Role role) {
 
         CustomUser user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        Role newRole  = roleRepository.findById(userId).orElseThrow(() -> new RuntimeException("Role not found"));
+        Role newRole = roleRepository.findById(role.getId()).orElseThrow(() -> new RuntimeException("Role not found"));
 
         user.setRole(newRole);
 
@@ -128,6 +129,21 @@ public class UserServiceImpl implements UserService {
         UserDto dtoUser = userToDto(user);
 
         return dtoUser;
+    }
+
+    @Override
+    public Boolean updateUserPassword(Long userId, ChangePasswordDto changePasswordDto) {
+
+        CustomUser user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (!passwordEncoder.matches(changePasswordDto.getOldPassword(), user.getPassword())) {
+            return false;
+        }
+
+        user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+        userRepository.save(user);
+
+        return true;
     }
 
 

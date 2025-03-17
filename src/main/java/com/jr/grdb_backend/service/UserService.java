@@ -1,5 +1,6 @@
 package com.jr.grdb_backend.service;
 
+import com.jr.grdb_backend.dto.ChangePasswordDto;
 import com.jr.grdb_backend.dto.LanguageDto;
 import com.jr.grdb_backend.dto.RegisterDto;
 import com.jr.grdb_backend.dto.UserDto;
@@ -23,5 +24,6 @@ public interface UserService {
    String getCustomUserThroughAuthentication();
    UserDto getUserByEmail(String email);
    UserDto updateRole(Long userId,  Role role);
+   Boolean updateUserPassword(Long userId, ChangePasswordDto changePasswordDto);
 }
 

@@ -1,5 +1,6 @@
 package com.jr.grdb_backend.controller;
 
+import com.jr.grdb_backend.dto.ChangePasswordDto;
 import com.jr.grdb_backend.dto.LanguageDto;
 import com.jr.grdb_backend.dto.UserDto;
 import com.jr.grdb_backend.model.CustomUser;
@@ -54,6 +55,18 @@ public class UserController {
     public ResponseEntity<UserDto> updateRole(@PathVariable Long userId, @RequestBody Role role) {
 
         return ResponseEntity.ok().body(this.userService.updateRole(userId, role));
+    }
+
+    @PutMapping("{userId}/password")
+    public ResponseEntity<String> updateUserPassword(@PathVariable long userId, @RequestBody ChangePasswordDto changePassword){
+
+        boolean changeSuccess = this.userService.updateUserPassword(userId, changePassword);
+
+        if (changeSuccess){
+            return ResponseEntity.ok().body("Password changed");
+        } else {
+            return ResponseEntity.status(404).body("Old password incorrect or unable to find user");
+        }
     }
 
 //    @GetMapping("/{email}")
