@@ -1,5 +1,6 @@
 package com.jr.grdb_backend.controller;
 
+import com.jr.grdb_backend.controller.responses.ChangePasswordResponse;
 import com.jr.grdb_backend.dto.ChangePasswordDto;
 import com.jr.grdb_backend.dto.LanguageDto;
 import com.jr.grdb_backend.dto.UserDto;
@@ -58,14 +59,16 @@ public class UserController {
     }
 
     @PutMapping("{userId}/password")
-    public ResponseEntity<String> updateUserPassword(@PathVariable long userId, @RequestBody ChangePasswordDto changePassword){
+    public ResponseEntity<ChangePasswordResponse> updateUserPassword(@PathVariable long userId, @RequestBody ChangePasswordDto changePassword){
 
         boolean changeSuccess = this.userService.updateUserPassword(userId, changePassword);
 
         if (changeSuccess){
-            return ResponseEntity.ok().body("Password changed");
+            ChangePasswordResponse respose = new ChangePasswordResponse(200,"password changed");
+            return ResponseEntity.ok().body(respose);
         } else {
-            return ResponseEntity.status(404).body("Old password incorrect or unable to find user");
+            ChangePasswordResponse respose = new ChangePasswordResponse(404,"Old password incorrect or unable to find user");
+            return ResponseEntity.status(404).body(respose);
         }
     }
 
