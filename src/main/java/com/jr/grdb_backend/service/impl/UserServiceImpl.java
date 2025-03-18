@@ -1,13 +1,17 @@
 package com.jr.grdb_backend.service.impl;
 
+import com.jr.grdb_backend.dto.ChangePasswordDto;
 import com.jr.grdb_backend.dto.LanguageDto;
 import com.jr.grdb_backend.dto.RegisterDto;
 import com.jr.grdb_backend.dto.UserDto;
 import com.jr.grdb_backend.enume.Language;
 import com.jr.grdb_backend.model.CustomUser;
 import com.jr.grdb_backend.model.Game;
+import com.jr.grdb_backend.model.Role;
+import com.jr.grdb_backend.repository.RoleRepository;
 import com.jr.grdb_backend.repository.UserRepository;
 import com.jr.grdb_backend.service.GameService;
+import com.jr.grdb_backend.service.RoleService;
 import com.jr.grdb_backend.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +33,16 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     private GameService gameService;
+    private RoleService roleService;
+    @Autowired
+    private RoleRepository roleRepository;
 
     public UserServiceImpl(UserRepository userRepository,
-                           GameService gameService) {
+                           GameService gameService,
+                           RoleService roleService) {
         this.userRepository = userRepository;
         this.gameService = gameService;
+        this.roleService = roleService;
     }
 
     @Override
@@ -94,7 +103,7 @@ public class UserServiceImpl implements UserService {
     public String getCustomUserThroughAuthentication() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        CustomUser user= (CustomUser) authentication.getPrincipal();
+        CustomUser user = (CustomUser) authentication.getPrincipal();
         return user.getUsername();
     }
 
@@ -105,6 +114,36 @@ public class UserServiceImpl implements UserService {
             return userToDto(user.get());
         }
         throw new RuntimeException("User not found");
+    }
+
+    @Override
+    public UserDto updateRole(Long userId, Role role) {
+
+        CustomUser user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Role newRole = roleRepository.findById(role.getId()).orElseThrow(() -> new RuntimeException("Role not found"));
+
+        user.setRole(newRole);
+
+        userRepository.save(user);
+
+        UserDto dtoUser = userToDto(user);
+
+        return dtoUser;
+    }
+
+    @Override
+    public Boolean updateUserPassword(Long userId, ChangePasswordDto changePasswordDto) {
+
+        CustomUser user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (!passwordEncoder.matches(changePasswordDto.getOldPassword(), user.getPassword())) {
+            return false;
+        }
+
+        user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+        userRepository.save(user);
+
+        return true;
     }
 
 
