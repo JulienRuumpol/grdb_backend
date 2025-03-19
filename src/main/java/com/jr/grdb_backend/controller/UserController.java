@@ -2,6 +2,7 @@ package com.jr.grdb_backend.controller;
 
 import com.jr.grdb_backend.controller.responses.ChangePasswordResponse;
 import com.jr.grdb_backend.dto.ChangePasswordDto;
+import com.jr.grdb_backend.dto.ChangeUserDetailsDto;
 import com.jr.grdb_backend.dto.LanguageDto;
 import com.jr.grdb_backend.dto.UserDto;
 import com.jr.grdb_backend.model.CustomUser;
@@ -70,6 +71,11 @@ public class UserController {
             ChangePasswordResponse respose = new ChangePasswordResponse(404,"Old password incorrect or unable to find user");
             return ResponseEntity.status(404).body(respose);
         }
+    }
+
+    @PutMapping("{userId}")
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long userId, @RequestBody ChangeUserDetailsDto userDto) {
+        return ResponseEntity.ok().body(userService.updateUserDetails(userId, userDto));
     }
 
 //    @GetMapping("/{email}")
