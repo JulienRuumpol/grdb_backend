@@ -1,5 +1,6 @@
 package com.jr.grdb_backend.service.impl;
 
+import com.jr.grdb_backend.controller.exceptions.AlreadyExistingEmailException;
 import com.jr.grdb_backend.dto.*;
 import com.jr.grdb_backend.enume.Language;
 import com.jr.grdb_backend.model.CustomUser;
@@ -149,9 +150,8 @@ public class UserServiceImpl implements UserService {
         CustomUser user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         Optional<CustomUser> alreadyExisitingEmailUser = userRepository.findByEmail(changeUserDetailsDto.getEmail());
-        if (alreadyExisitingEmailUser.isPresent()) {
-            //todo please make sure this returns an error. emails ahve to be unique
-            return null;
+        if (alreadyExisitingEmailUser.isPresent() && user.getId() != alreadyExisitingEmailUser.get().getId()) {
+            throw new AlreadyExistingEmailException("A user with " + changeUserDetailsDto.getEmail() + " already exists");
         }
 
         user.setEmail(changeUserDetailsDto.getEmail());

@@ -1,5 +1,6 @@
 package com.jr.grdb_backend.controller;
 
+import com.jr.grdb_backend.controller.exceptions.AlreadyExistingEmailException;
 import com.jr.grdb_backend.controller.responses.ChangePasswordResponse;
 import com.jr.grdb_backend.dto.ChangePasswordDto;
 import com.jr.grdb_backend.dto.ChangeUserDetailsDto;
@@ -75,7 +76,12 @@ public class UserController {
 
     @PutMapping("{userId}")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long userId, @RequestBody ChangeUserDetailsDto userDto) {
-        return ResponseEntity.ok().body(userService.updateUserDetails(userId, userDto));
+
+        try{
+            return ResponseEntity.ok().body(userService.updateUserDetails(userId, userDto));
+        }catch (AlreadyExistingEmailException e){
+            return ResponseEntity.status(409).body(new UserDto());
+        }
     }
 
 //    @GetMapping("/{email}")
