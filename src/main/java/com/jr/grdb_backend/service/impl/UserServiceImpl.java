@@ -1,9 +1,7 @@
 package com.jr.grdb_backend.service.impl;
 
-import com.jr.grdb_backend.dto.ChangePasswordDto;
-import com.jr.grdb_backend.dto.LanguageDto;
-import com.jr.grdb_backend.dto.RegisterDto;
-import com.jr.grdb_backend.dto.UserDto;
+import com.jr.grdb_backend.controller.exceptions.AlreadyExistingEmailException;
+import com.jr.grdb_backend.dto.*;
 import com.jr.grdb_backend.enume.Language;
 import com.jr.grdb_backend.model.CustomUser;
 import com.jr.grdb_backend.model.Game;
@@ -144,6 +142,25 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         return true;
+    }
+
+    @Override
+    public UserDto updateUserDetails(Long userId, ChangeUserDetailsDto changeUserDetailsDto) {
+
+        CustomUser user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Optional<CustomUser> alreadyExisitingEmailUser = userRepository.findByEmail(changeUserDetailsDto.getEmail());
+        if (alreadyExisitingEmailUser.isPresent() && user.getId() != alreadyExisitingEmailUser.get().getId()) {
+            throw new AlreadyExistingEmailException("A user with " + changeUserDetailsDto.getEmail() + " already exists");
+        }
+
+        user.setEmail(changeUserDetailsDto.getEmail());
+        user.setUserName(changeUserDetailsDto.getUsername());
+        user.setFirstName(changeUserDetailsDto.getFirstname());
+        user.setLastName(changeUserDetailsDto.getLastname());
+
+        userRepository.save(user);
+        return userToDto(user);
     }
 
 
