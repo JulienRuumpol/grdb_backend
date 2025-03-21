@@ -58,6 +58,11 @@ public class CustomUser implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Review> reviews;
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

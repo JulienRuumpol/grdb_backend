@@ -7,24 +7,28 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Date;
 
 @Data
 @Entity
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Game {
+@Builder
+public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String description;
-//    private byte[] image;
 
-
+    @ManyToOne
+    @JoinColumn(name = "game_id", nullable = false)
     @JsonIgnore
-    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews;
+    private Game game;
 
+    private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
+    private CustomUser user;
+    private Date postedDate;
 }
