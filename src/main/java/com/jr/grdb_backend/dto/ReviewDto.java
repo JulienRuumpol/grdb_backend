@@ -12,5 +12,6 @@ public class ReviewDto {
     private Long userId;
     private String description;
     private Date postedDate;
+    private String username;
 }
 

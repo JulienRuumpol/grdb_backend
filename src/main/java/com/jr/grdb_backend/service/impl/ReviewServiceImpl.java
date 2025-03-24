@@ -64,12 +64,14 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private ReviewDto entityToDto(Review review){
+        CustomUser user = review.getUser();
 
         return ReviewDto.builder()
                 .GameId(review.getGame().getId())
                 .userId(review.getUser().getId())
                 .postedDate(review.getPostedDate())
                 .description(review.getDescription())
+                .username(user.getUsername())
                 .build();
 
     }
