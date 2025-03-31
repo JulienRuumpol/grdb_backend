@@ -19,16 +19,18 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne( fetch = FetchType.LAZY)
     @JoinColumn(name = "game_id", nullable = false)
     @JsonIgnore
     private Game game;
 
     private String description;
 
-    @ManyToOne
+    @ManyToOne( fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
     private CustomUser user;
     private Date postedDate;
+
+    private Date recentlyUpdatedDate;
 }

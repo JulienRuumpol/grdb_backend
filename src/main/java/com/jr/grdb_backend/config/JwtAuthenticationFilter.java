@@ -71,6 +71,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 HttpServletResponse httpResponse = (HttpServletResponse) response;
                 httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             }
+//        filterChain.doFilter(request, response);
 
     }
 

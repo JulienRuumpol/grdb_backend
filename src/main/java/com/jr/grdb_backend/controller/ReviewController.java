@@ -1,6 +1,7 @@
 package com.jr.grdb_backend.controller;
 
 import com.jr.grdb_backend.dto.ReviewDto;
+import com.jr.grdb_backend.dto.UpdateReviewDto;
 import com.jr.grdb_backend.model.Review;
 import com.jr.grdb_backend.service.ReviewService;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class ReviewController {
     }
 
     @GetMapping("/{gameId}")
-    public ResponseEntity<List<ReviewDto>> getReviewsByGameId(@PathVariable Long gameId){
+    public ResponseEntity<List<ReviewDto>> getReviewsByGameId(@PathVariable Long gameId) {
 
         return ResponseEntity.ok(reviewService.getReviewsByGameId(gameId));
 
@@ -27,10 +28,27 @@ public class ReviewController {
 
 
     @PostMapping("")
-    public ResponseEntity<Review> AddReviewToGame(@RequestBody ReviewDto reviewDto){
+    public ResponseEntity<Review> AddReviewToGame(@RequestBody ReviewDto reviewDto) {
 
         return ResponseEntity.ok().body(this.reviewService.addReviewToGame(reviewDto));
 
     }
+
+    @PutMapping("/{reviewId}")
+    public ResponseEntity<ReviewDto> UpdateReview(@PathVariable Long reviewId, @RequestBody UpdateReviewDto updateReviewDto) {
+        return ResponseEntity.ok().body(this.reviewService.updateReview(reviewId, updateReviewDto));
+
+
+
+    }
+
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity deleteReview(@PathVariable Long reviewId) {
+
+        this.reviewService.deleteReview(reviewId);
+
+        return ResponseEntity.ok().build();
+    }
+
 
 }

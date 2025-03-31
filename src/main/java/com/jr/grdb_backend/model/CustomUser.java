@@ -45,7 +45,7 @@ public class CustomUser implements UserDetails {
     private boolean isAccountNonLocked;
     @Column(name = "is_credential_non_expired")
     private boolean isCredentialNonExpired;
-    @ManyToMany
+    @ManyToMany( fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_game",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -54,11 +54,11 @@ public class CustomUser implements UserDetails {
     )
     private List<Game> games = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne( fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true,  fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Review> reviews;
 

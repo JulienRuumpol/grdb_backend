@@ -13,5 +13,6 @@ public class ReviewDto {
     private String description;
     private Date postedDate;
     private String username;
+    private Date recentlyUpdatedDate;
 }
 
