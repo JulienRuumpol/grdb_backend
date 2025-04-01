@@ -8,6 +8,7 @@ import java.util.Date;
 @Builder
 @Data
 public class ReviewDto {
+    private Long id;
     private Long GameId;
     private Long userId;
     private String description;

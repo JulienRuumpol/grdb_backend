@@ -89,6 +89,7 @@ public class ReviewServiceImpl implements ReviewService {
         Game game = gameRepository.findById(reviewDto.getGameId()).orElseThrow(() -> new RuntimeException("Game with id " + reviewDto.getGameId() + " not found"));
 
         return Review.builder()
+                .id(reviewDto.getId())
                 .description(reviewDto.getDescription())
                 .user(user)
                 .game(game)
@@ -101,6 +102,7 @@ public class ReviewServiceImpl implements ReviewService {
         CustomUser user = review.getUser();
 
         return ReviewDto.builder()
+                .id(review.getId())
                 .GameId(review.getGame().getId())
                 .userId(review.getUser().getId())
                 .postedDate(review.getPostedDate())
