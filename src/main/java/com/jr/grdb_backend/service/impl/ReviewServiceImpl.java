@@ -51,7 +51,7 @@ public class ReviewServiceImpl implements ReviewService {
     public void deleteReview(Long reviewId) {
         Review review = this.reviewRepository.findById(reviewId).orElseThrow(() -> new EntityNotFoundException("Review with id " + reviewId + " not found"));
 
-        if (isReviewOwner(review)) {
+        if (isReviewOwner(review) || review.getUser().getRole().getName().equals("Admin")) {
             this.reviewRepository.delete(review);
 
         } else {
