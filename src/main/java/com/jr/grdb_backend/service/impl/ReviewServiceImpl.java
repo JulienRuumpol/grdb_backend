@@ -64,7 +64,7 @@ public class ReviewServiceImpl implements ReviewService {
     public ReviewDto updateReview(Long reviewId, UpdateReviewDto reviewDto) {
         Review review = this.reviewRepository.findById(reviewId).orElseThrow(() -> new EntityNotFoundException("Review with id " + reviewId + " not found"));
 
-        if (isReviewOwner(review)) {
+        if (isReviewOwner(review) || review.getUser().getRole().getName().equals("Admin")) {
             review.setDescription(reviewDto.getNewDescription());
             review.setRecentlyUpdatedDate(new Date());
             return this.entityToDto(reviewRepository.save(review));
