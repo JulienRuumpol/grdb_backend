@@ -55,7 +55,7 @@ public class ReviewServiceImpl implements ReviewService {
             this.reviewRepository.delete(review);
 
         } else {
-            throw new UnauthorizedActionException("You do not have permission to delete this review.");
+            throw new UnauthorizedActionException("You do not have permission to delete this review");
         }
 
     }
@@ -69,14 +69,14 @@ public class ReviewServiceImpl implements ReviewService {
             review.setRecentlyUpdatedDate(new Date());
             return this.entityToDto(reviewRepository.save(review));
         } else{
-            throw new UnauthorizedActionException("You do not have permission to update this review.");
+            throw new UnauthorizedActionException("You do not have permission to update this review");
         }
     }
 
     @Transactional
     @Override
     public Review addReviewToGame(ReviewDto reviewDto) {
-        //todo generating overview results in error in user.tostring.
+        //todo generating overview results in stackoverflow error in user.tostring.
         Review newReview = buildReviewFromDto(reviewDto);
         //todo check date generation. this should probably be in BE and not frontend??
 
@@ -84,7 +84,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
 
-    private Review buildReviewFromDto(ReviewDto reviewDto) {
+    public Review buildReviewFromDto(ReviewDto reviewDto) {
         CustomUser user = userRepository.findById(reviewDto.getUserId()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         Game game = gameRepository.findById(reviewDto.getGameId()).orElseThrow(() -> new RuntimeException("Game with id " + reviewDto.getGameId() + " not found"));
 
@@ -98,7 +98,7 @@ public class ReviewServiceImpl implements ReviewService {
                 .build();
     }
 
-    private ReviewDto entityToDto(Review review) {
+    public ReviewDto entityToDto(Review review) {
         CustomUser user = review.getUser();
 
         return ReviewDto.builder()
