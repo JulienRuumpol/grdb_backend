@@ -15,7 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class) // Important!
+@ExtendWith(MockitoExtension.class)
 class RoleServiceImplTest {
     @InjectMocks
     private RoleServiceImpl roleServiceImpl;
@@ -40,8 +40,8 @@ class RoleServiceImplTest {
         this.setRoleName("Admin");
 
         List<Role> roles = this.roleServiceImpl.getAll();
-        verify(this.roleRepository, times(1)).findAll();
 
+        verify(this.roleRepository, times(1)).findAll();
         assertEquals(1, roles.size());
 
     }
