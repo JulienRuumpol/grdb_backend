@@ -75,12 +75,13 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional
     @Override
-    public Review addReviewToGame(ReviewDto reviewDto) {
+    public ReviewDto addReviewToGame(ReviewDto reviewDto) {
         //todo generating overview results in stackoverflow error in user.tostring.
         Review newReview = buildReviewFromDto(reviewDto);
         //todo check date generation. this should probably be in BE and not frontend??
 
-        return reviewRepository.save(newReview);
+        Review review = this.reviewRepository.save(newReview);
+        return entityToDto(review);
     }
 
 

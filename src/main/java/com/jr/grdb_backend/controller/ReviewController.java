@@ -2,7 +2,6 @@ package com.jr.grdb_backend.controller;
 
 import com.jr.grdb_backend.dto.ReviewDto;
 import com.jr.grdb_backend.dto.UpdateReviewDto;
-import com.jr.grdb_backend.model.Review;
 import com.jr.grdb_backend.service.ReviewService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +26,8 @@ public class ReviewController {
     }
 
 
-    @PostMapping("")
-    public ResponseEntity<Review> AddReviewToGame(@RequestBody ReviewDto reviewDto) {
+    @PostMapping("/")
+    public ResponseEntity<ReviewDto> AddReviewToGame(@RequestBody ReviewDto reviewDto) {
 
         return ResponseEntity.ok().body(this.reviewService.addReviewToGame(reviewDto));
 
@@ -37,8 +36,6 @@ public class ReviewController {
     @PutMapping("/{reviewId}")
     public ResponseEntity<ReviewDto> UpdateReview(@PathVariable Long reviewId, @RequestBody UpdateReviewDto updateReviewDto) {
         return ResponseEntity.ok().body(this.reviewService.updateReview(reviewId, updateReviewDto));
-
-
 
     }
 
