@@ -2,6 +2,7 @@ package com.jr.grdb_backend.service.impl;
 
 import com.jr.grdb_backend.model.CustomUser;
 import com.jr.grdb_backend.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class CustomUserDetailService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     @Override
     public CustomUser loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<CustomUser> user = userRepository.findByEmail(username);

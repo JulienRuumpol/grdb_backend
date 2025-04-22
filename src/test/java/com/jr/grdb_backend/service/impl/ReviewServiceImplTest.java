@@ -43,14 +43,6 @@ class ReviewServiceImplTest {
     private CustomUser user;
     private Role role;
 
-//    public ReviewServiceImplTest(ReviewRepository reviewRepository,
-//                                 GameRepository gameRepository,
-//                                 UserRepository userRepository
-//                                 ) {
-//        this.reviewRepository =reviewRepository;
-//        this.gameRepository = gameRepository;
-//        this.userRepository =  userRepository;
-//    }
 
     @BeforeEach
     void setUp() {
@@ -143,7 +135,7 @@ class ReviewServiceImplTest {
     void updateReview() {
         String updateText = "this has been updated";
         when(this.reviewRepository.findById(this.review.getId())).thenReturn(Optional.ofNullable(this.review));
-        when(reviewRepository.save(any(Review.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(this.reviewRepository.save(any(Review.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         UpdateReviewDto updateReviewDto = new UpdateReviewDto(updateText);
 
@@ -198,9 +190,9 @@ class ReviewServiceImplTest {
 
         when(reviewRepository.save(any(Review.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Review addedReview = this.reviewService.addReviewToGame(newReviewDto);
+        ReviewDto addedReview = this.reviewService.addReviewToGame(newReviewDto);
 
-        assertEquals(addedReview, this.reviewService.buildReviewFromDto(newReviewDto));
+        assertEquals(addedReview, newReviewDto);
 
     }
 
