@@ -12,7 +12,6 @@ import com.jr.grdb_backend.service.GameService;
 import com.jr.grdb_backend.service.RoleService;
 import com.jr.grdb_backend.service.UserService;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,19 +27,21 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
-    @Autowired
     private PasswordEncoder passwordEncoder;
     private GameService gameService;
     private RoleService roleService;
-    @Autowired
     private RoleRepository roleRepository;
 
     public UserServiceImpl(UserRepository userRepository,
                            GameService gameService,
-                           RoleService roleService) {
+                           RoleService roleService,
+                           RoleRepository roleRepository,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.gameService = gameService;
         this.roleService = roleService;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -176,7 +177,7 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    private UserDto userToDto(CustomUser user) {
+    public UserDto userToDto(CustomUser user) {
         return UserDto.builder()
                 .email(user.getEmail())
 //                .password(user.getPassword())
