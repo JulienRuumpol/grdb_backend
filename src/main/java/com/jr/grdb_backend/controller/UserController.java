@@ -54,7 +54,7 @@ public class UserController {
 
         UserDto userDto = this.userService.getCustomUserById(userId);
 
-        return ResponseEntity.ok().body(this.userService.getCustomUserById(userId));
+        return ResponseEntity.ok().body(userDto);
     }
 
     @PutMapping("/{userId}/role")

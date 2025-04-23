@@ -175,6 +175,10 @@ class ReviewServiceImplTest {
 
     }
 
+    /**
+     * Unit test {@link ReviewServiceImpl#addReviewToGame(ReviewDto)}
+     * Scenario: successfully add a review to a game
+     */
     @Test
     void addReviewToGame() {
         ReviewDto newReviewDto = ReviewDto.builder()
