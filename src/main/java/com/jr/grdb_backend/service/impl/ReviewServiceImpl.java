@@ -51,7 +51,7 @@ public class ReviewServiceImpl implements ReviewService {
     public void deleteReview(Long reviewId) {
         Review review = this.reviewRepository.findById(reviewId).orElseThrow(() -> new EntityNotFoundException("Review with id " + reviewId + " not found"));
 
-        if (isReviewOwner(review) || review.getUser().getRole().getName().equals("Admin")) {
+        if (isReviewOwner(review) || isAdmin()) {
             this.reviewRepository.delete(review);
 
         } else {
@@ -64,11 +64,11 @@ public class ReviewServiceImpl implements ReviewService {
     public ReviewDto updateReview(Long reviewId, UpdateReviewDto reviewDto) {
         Review review = this.reviewRepository.findById(reviewId).orElseThrow(() -> new EntityNotFoundException("Review with id " + reviewId + " not found"));
 
-        if (isReviewOwner(review) || review.getUser().getRole().getName().equals("Admin")) {
+        if (isReviewOwner(review)) {
             review.setDescription(reviewDto.getNewDescription());
             review.setRecentlyUpdatedDate(new Date());
             return this.entityToDto(reviewRepository.save(review));
-        } else{
+        } else {
             throw new UnauthorizedActionException("You do not have permission to update this review");
         }
     }
@@ -113,14 +113,31 @@ public class ReviewServiceImpl implements ReviewService {
                 .build();
     }
 
-    private Boolean isReviewOwner(Review review) {
+    @Transactional
+    protected Boolean isReviewOwner(Review review) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
-            CustomUser user = (CustomUser) authentication.getPrincipal();
+            CustomUser principalUser = (CustomUser) authentication.getPrincipal();
 
+            CustomUser user = this.userRepository.findByEmail(principalUser.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+
+            System.out.println(user.getRole());
             return Objects.equals(user.getId(), review.getUser().getId());
 
         }
         return false;
     }
+
+    @Transactional
+    protected Boolean isAdmin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            CustomUser principalUser = (CustomUser) authentication.getPrincipal();
+            CustomUser user = this.userRepository.findByEmail(principalUser.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+
+            return user.getRole().getName().equals("Admin");
+        }
+        return false;
+    }
 }
+

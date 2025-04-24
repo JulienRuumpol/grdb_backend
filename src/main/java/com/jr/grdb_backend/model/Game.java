@@ -30,9 +30,31 @@ public class Game {
     private List<Review> reviews = new ArrayList<>();
 
 
-
-    public void addReviewToGame(Review review){
+    public void addReviewToGame(Review review) {
         this.reviews.add(review);
     }
 
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", reviews=" + appendAllReviews() +
+                '}';
+    }
+
+    private String appendAllReviews() {
+        StringBuilder reviewsString = new StringBuilder();
+
+        for (Review review : reviews) {
+            String username = review.getUser().getUsername();
+            String description = review.getDescription();
+            String date = review.getPostedDate().toString();
+            reviewsString.append(username).append(" ").append(date).append(" ").append(description);
+
+        }
+        return reviewsString.toString();
+    }
 }

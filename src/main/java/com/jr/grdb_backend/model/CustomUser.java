@@ -96,4 +96,28 @@ public class CustomUser implements UserDetails {
     public void addGameToGames(Game game){
         this.games.add(game);
     }
+
+    @Override
+    public String toString() {
+        return "CustomUser{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", enabled=" + enabled +
+                ", language=" + language +
+                ", isAccountNonExpired=" + isAccountNonExpired +
+                ", isAccountNonLocked=" + isAccountNonLocked +
+                ", isCredentialNonExpired=" + isCredentialNonExpired +
+                ", games=" + games +
+                ", role=" + role +
+                ", reviews=" + reviews +
+                '}';
+    }
+
+
+
+
 }

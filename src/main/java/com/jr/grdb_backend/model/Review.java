@@ -33,4 +33,17 @@ public class Review {
     private Date postedDate;
 
     private Date recentlyUpdatedDate;
+
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "id=" + id +
+                ", game=" + game.getName() +
+                ", description='" + description + '\'' +
+                ", user=" + user.getUsername() +
+                ", postedDate=" + postedDate +
+                ", recentlyUpdatedDate=" + recentlyUpdatedDate +
+                '}';
+    }
 }
