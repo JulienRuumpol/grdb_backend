@@ -3,8 +3,9 @@ package com.jr.grdb_backend.dto;
 import lombok.Builder;
 import lombok.Data;
 
-@Builder
 @Data
-public class LanguageDto {
-    private String language;
+@Builder
+public class RoleDto {
+    private long id;
+    private String name;
 }

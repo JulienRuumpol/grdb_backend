@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public CustomUser updateLanguage(Long userId, LanguageDto languageDto) {
         CustomUser user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        user.setLanguage(languageDto.getLanguage());
+        user.setLanguage(Language.valueOf(languageDto.getLanguage()));
         return userRepository.save(user);
     }
 
@@ -166,15 +166,20 @@ public class UserServiceImpl implements UserService {
 
 
     private CustomUser dtoToEntity(UserDto dto) {
-        return CustomUser.builder()
+        CustomUser user = CustomUser.builder()
                 .email(dto.getEmail())
                 .password(dto.getPassword())
                 .userName(dto.getUserName())
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
-                .language(dto.getLanguage())
-                .role(dto.getRole())
+                .language(Language.valueOf(dto.getLanguage().getLanguage()))
+                .role(Role.builder()
+                        .id(dto.getRole().getId())
+                        .name(dto.getRole().getName())
+                        .build())
                 .build();
+
+        return user;
     }
 
     public UserDto userToDto(CustomUser user) {
@@ -185,8 +190,13 @@ public class UserServiceImpl implements UserService {
                 .userName(user.getUsername())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
-                .language(user.getLanguage())
-                .role(user.getRole())
+                .language(LanguageDto.builder()
+                        .language(user.getLanguage().name())
+                        .build())
+                .role(RoleDto.builder()
+                        .id(user.getRole().getId())
+                        .name(user.getRole().getName())
+                        .build())
                 .build();
     }
 

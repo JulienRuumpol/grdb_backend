@@ -1,7 +1,5 @@
 package com.jr.grdb_backend.dto;
 
-import com.jr.grdb_backend.enume.Language;
-import com.jr.grdb_backend.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +15,6 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String email;
-    private Language language;
-    private Role role;
+    private LanguageDto language;
+    private RoleDto role;
 }
