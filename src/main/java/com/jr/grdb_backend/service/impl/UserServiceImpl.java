@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -45,8 +46,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<CustomUser> getAll() {
-        return userRepository.findAll();
+    public List<UserDto> getAll() {
+        List<CustomUser> users = userRepository.findAll();
+        List<UserDto> userDtos = new ArrayList<>();
+        for (CustomUser user : users) {
+            userDtos.add(userToDto(user));
+        }
+
+        return userDtos;
     }
 
     @Override
@@ -167,6 +174,7 @@ public class UserServiceImpl implements UserService {
 
     private CustomUser dtoToEntity(UserDto dto) {
         CustomUser user = CustomUser.builder()
+                .id(dto.getId())
                 .email(dto.getEmail())
                 .password(dto.getPassword())
                 .userName(dto.getUserName())
@@ -184,6 +192,7 @@ public class UserServiceImpl implements UserService {
 
     public UserDto userToDto(CustomUser user) {
         return UserDto.builder()
+                .id(user.getId())
                 .email(user.getEmail())
 //                .password(user.getPassword())
                 .password("")

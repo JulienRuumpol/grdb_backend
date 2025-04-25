@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface UserService {
 
-   List<CustomUser> getAll();
+   List<UserDto> getAll();
 
    CustomUser findByEmail(String email);
    CustomUser registerDtoToUser(RegisterDto dto);
