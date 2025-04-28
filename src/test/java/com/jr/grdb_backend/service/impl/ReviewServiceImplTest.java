@@ -16,6 +16,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Date;
 import java.util.List;
@@ -42,6 +45,12 @@ class ReviewServiceImplTest {
     private Game game;
     private CustomUser user;
     private Role role;
+    @Mock
+    private Authentication authentication;
+
+    @Mock
+    private SecurityContext securityContext;
+
 
 
     @BeforeEach
@@ -61,6 +70,7 @@ class ReviewServiceImplTest {
         this.user.setId(1l);
         this.user.setUserName("Tester");
         this.user.setRole(this.role);
+        this.user.setEmail("test@test.com");
         this.user.addGameToGames(game);
 
         this.review = new Review();
@@ -97,6 +107,13 @@ class ReviewServiceImplTest {
         //todo figure out stackoverflow error in this test
 //        when(reviewRepository.findAllByGameId(game.getId())).thenReturn((game.getReviews()));
         when(this.reviewRepository.findById(this.review.getId())).thenReturn(Optional.ofNullable(this.review));
+
+
+        when(this.securityContext.getAuthentication()).thenReturn(this.authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(this.authentication.getPrincipal()).thenReturn(this.user);
+        when(this.userRepository.findByEmail(this.user.getEmail())).thenReturn(Optional.ofNullable(this.user));
+
 
         this.reviewService.deleteReview(this.review.getId());
 
@@ -137,9 +154,14 @@ class ReviewServiceImplTest {
         when(this.reviewRepository.findById(this.review.getId())).thenReturn(Optional.ofNullable(this.review));
         when(this.reviewRepository.save(any(Review.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
+        when(this.securityContext.getAuthentication()).thenReturn(this.authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(this.authentication.getPrincipal()).thenReturn(this.user);
+        when(this.userRepository.findByEmail(this.user.getEmail())).thenReturn(Optional.ofNullable(this.user));
+
         UpdateReviewDto updateReviewDto = new UpdateReviewDto(updateText);
 
-        ReviewDto dto = this.reviewService.updateReview(this.review.getId(), updateReviewDto);
+        ReviewDto dto = this.reviewService.updateReview(this.user.getId(), updateReviewDto);
 
         Review updatedReviewExample = this.review;
         updatedReviewExample.setDescription(updateText);
@@ -155,17 +177,23 @@ class ReviewServiceImplTest {
 
     @Test
     void unAuthorizedToUpdateReview() {
-        Review newReview = this.review;
-        CustomUser newUser = this.user;
+        CustomUser newUser = new CustomUser();
+        newUser.setEmail("newEmail@mail.com");
+        newUser.setId(2L);
         Role newRole = this.role;
         newRole.setName("Basic");
         newUser.setRole(newRole);
-        newReview.setUser(newUser);
         String updateText = "this has been updated";
 
         UpdateReviewDto updateReviewDto = new UpdateReviewDto(updateText);
 
-        when(this.reviewRepository.findById(this.review.getId())).thenReturn(Optional.of(newReview));
+        when(this.reviewRepository.findById(this.review.getId())).thenReturn(Optional.of(this.review));
+
+        when(this.securityContext.getAuthentication()).thenReturn(this.authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(this.authentication.getPrincipal()).thenReturn(newUser);
+        when(this.userRepository.findByEmail(newUser.getEmail())).thenReturn(Optional.of(newUser));
+
 
         Exception exception = assertThrows(UnauthorizedActionException.class, () -> {
             this.reviewService.updateReview(this.review.getId(), updateReviewDto);

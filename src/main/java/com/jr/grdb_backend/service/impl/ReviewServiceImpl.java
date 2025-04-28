@@ -121,7 +121,6 @@ public class ReviewServiceImpl implements ReviewService {
 
             CustomUser user = this.userRepository.findByEmail(principalUser.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
 
-            System.out.println(user.getRole());
             return Objects.equals(user.getId(), review.getUser().getId());
 
         }

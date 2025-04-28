@@ -83,6 +83,7 @@ class UserServiceImplTest {
         this.user.setPassword("test");
         this.user.setFirstName("Tester");
         this.user.setLastName("Tested");
+        this.user.setLanguage(Language.DUTCH);
         this.user.addGameToGames(game);
     }
 
@@ -94,7 +95,7 @@ class UserServiceImplTest {
     void getAll() {
         when(this.userRepository.findAll()).thenReturn(Collections.singletonList(this.user));
 
-        List<CustomUser> users = this.userService.getAll();
+        List<UserDto> users = this.userService.getAll();
 
         verify(this.userRepository, times(1)).findAll();
         assertEquals(1, users.size());
@@ -220,8 +221,9 @@ class UserServiceImplTest {
      */
     @Test
     void updateLanguage() {
-        LanguageDto languageDto = new LanguageDto();
-        languageDto.setLanguage(Language.DUTCH);
+        LanguageDto languageDto = LanguageDto.builder()
+                .language(Language.DUTCH.name())
+                .build();
 
         when(this.userRepository.findById(this.user.getId())).thenReturn(Optional.ofNullable(this.user));
         when(this.userRepository.save(any(CustomUser.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -245,9 +247,14 @@ class UserServiceImplTest {
 
         UserDto dtoExample = UserDto.builder()
                 .email(this.user.getEmail())
-                .role(this.user.getRole())
+                .role(RoleDto.builder()
+                        .name(this.user.getRole().getName())
+                        .id(this.user.getRole().getId())
+                        .build())
                 .userName(this.user.getUsername())
-                .language(this.user.getLanguage())
+                .language(LanguageDto.builder()
+                        .language(this.user.getLanguage().name())
+                        .build())
                 .firstName(this.user.getFirstName())
                 .lastName(this.user.getLastName())
 //                .password(this.user.getPassword())
@@ -324,7 +331,13 @@ class UserServiceImplTest {
 
         UserDto newUserDto = this.userService.updateRole(this.user.getId(), newRole);
         assertNotEquals(newUserDto, oldUserDto);
-        assertEquals(newUserDto.getRole(),newRole);
+
+        RoleDto newUserRoleDto = RoleDto.builder()
+                .id(newUserDto.getRole().getId())
+                .name(newUserDto.getRole().getName())
+                .build();
+
+        assertEquals(newUserDto.getRole(),newUserRoleDto);
 
     }
 
@@ -416,14 +429,20 @@ class UserServiceImplTest {
     @Test
     void userToDto(){
         UserDto userDtoExample = UserDto.builder()
+                .id(this.user.getId())
                 .email(this.user.getEmail())
 //                .password(user.getPassword())
                 .password("")
                 .userName(this.user.getUsername())
                 .firstName(this.user.getFirstName())
                 .lastName(this.user.getLastName())
-                .language(this.user.getLanguage())
-                .role(this.user.getRole())
+                .language(LanguageDto.builder()
+                        .language(this.user.getLanguage().name())
+                        .build())
+                .role(RoleDto.builder()
+                        .id(this.user.getRole().getId())
+                        .name(this.user.getRole().getName())
+                        .build())
                 .build();
 
         UserDto userDtoConverted = this.userService.userToDto(this.user);
