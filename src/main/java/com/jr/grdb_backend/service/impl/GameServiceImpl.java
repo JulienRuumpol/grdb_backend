@@ -59,6 +59,7 @@ public class GameServiceImpl implements GameService {
                 .id(gameDto.getId())
                 .name(gameDto.getName())
                 .description(gameDto.getDescription())
+                .imageRef(gameDto.getImageRef())
                 .build();
     }
 }

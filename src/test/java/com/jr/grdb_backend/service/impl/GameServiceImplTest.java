@@ -36,6 +36,7 @@ class GameServiceImplTest {
                 .description("A game used for testing purpose")
                 .id(1l)
                 .name("Testing: The video game")
+                .imageRef("test")
                 .build();
         this.gamesList.add(this.game);
     }
@@ -99,6 +100,7 @@ class GameServiceImplTest {
         gameDto.setId(this.game.getId());
         gameDto.setDescription(newDescription);
         gameDto.setName(newName);
+        gameDto.setImageRef("tests");
 
         when(this.gameRepository.getReferenceById(this.game.getId())).thenReturn(this.game);
         when(this.gameRepository.save(any(Game.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -124,6 +126,7 @@ class GameServiceImplTest {
         GameDto gameDto = new GameDto();
         gameDto.setDescription(newDescription);
         gameDto.setName(newName);
+        gameDto.setImageRef("newGameTest");
 
         when(this.gameRepository.save(any(Game.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
